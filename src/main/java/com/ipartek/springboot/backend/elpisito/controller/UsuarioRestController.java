@@ -1,7 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.controller;
 
 import com.ipartek.springboot.backend.elpisito.models.entity.Usuarios;
-import com.ipartek.springboot.backend.elpisito.models.services.IGeneralService;
+import com.ipartek.springboot.backend.elpisito.models.services.UsuarioServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +15,11 @@ public class UsuarioRestController {
     //añadiendo /api (en nuestro caso) a la URL del servidor.
 
     @Autowired
-    private IGeneralService<Usuarios> usuarioService;
+    private UsuarioServiceImpl usuarioService;
 
     @GetMapping("/usuarios")
     public List<Usuarios> findAll(){
-        return (List<Usuarios>) usuarioService.findAll();
+        return usuarioService.findAll();
     }
 
     @GetMapping("/usuarios-activos")

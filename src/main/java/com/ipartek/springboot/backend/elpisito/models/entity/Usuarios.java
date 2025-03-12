@@ -17,6 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Entity
+@Builder
 @Table(name="usuarios")
 public class Usuarios implements Serializable{
 	
@@ -39,6 +40,9 @@ public class Usuarios implements Serializable{
 
 	@Column
 	private Integer activo;
-	
+
+	public Integer getActivo() {
+		return activo;
+	}
 	
 }

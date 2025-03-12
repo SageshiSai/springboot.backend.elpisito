@@ -3,6 +3,7 @@ package com.ipartek.springboot.backend.elpisito.controller;
 
 import com.ipartek.springboot.backend.elpisito.models.entity.Tipo;
 import com.ipartek.springboot.backend.elpisito.models.services.IGeneralService;
+import com.ipartek.springboot.backend.elpisito.models.services.TipoServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +14,11 @@ import java.util.List;
 public class TipoRestController {
 
     @Autowired
-    private IGeneralService<Tipo> tipoService;
+    private TipoServiceImp tipoService;
 
     @GetMapping("/tipos")
     public List<Tipo> findAll(){
-        return (List<Tipo>) tipoService.findAll();
+        return tipoService.findAll();
     }
 
     @GetMapping("/tipos-activos")

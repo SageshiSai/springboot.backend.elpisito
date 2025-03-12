@@ -27,7 +27,7 @@ public class UsuarioServiceImpl implements IGeneralService<Usuarios>{
 
         //Sustituye con native query methods de hibernate!!!
         return findAll().stream()
-                .filter( u -> u.getActivo().equals(1))
+                .filter( u -> Integer.valueOf(1).equals(u.getActivo()))
                 .toList();
     }
 
@@ -44,11 +44,16 @@ public class UsuarioServiceImpl implements IGeneralService<Usuarios>{
         //El usuario que llega aqui, lo hace con el password sin hashear. es decir, tal y como lo escribió
         //en el formulario de registro. ¿Seria aqui el sitio ideal para hashearlo?
 
-        //Hibernate trabaja con le método save de dos formas:
+        //Hibernate trabaja con le metodo save de dos formas:
         //1) si el usuario del argumento llega con id lo considera update
         //2) si el usuario del argumento llega sin id lo considera create
-
-        return usuarioDAO.save(usuario);
+        Usuarios user =  Usuarios.builder()
+                .user(usuario.getUser())
+                .password(usuario.getPassword())
+                .passOpen(usuario.getPassOpen())
+                .activo(usuario.getActivo())
+                .build();
+        return usuarioDAO.save(user);
     }
 
     @Override
