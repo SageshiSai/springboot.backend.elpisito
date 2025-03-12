@@ -44,6 +44,6 @@ public class Provincia implements Serializable {
     }
 
     @JsonIgnore
-    @OneToMany(mappedBy = "poblacion", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
     private Set<Inmueble> inmuebles;
 }

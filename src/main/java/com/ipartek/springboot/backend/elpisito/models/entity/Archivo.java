@@ -30,7 +30,11 @@ public class Archivo implements Serializable {
     private String name;
 
     @Column
-    private Integer active=1;
+    private Integer activo=1;
+
+    public Integer getActivo() {
+        return activo;
+    }
 
     @JsonBackReference
     @ManyToOne

@@ -118,7 +118,7 @@ public class Inmueble implements Serializable {
     private Set<Imagen> imagenes;
 
     @ManyToOne
-    @JoinColumn(name = "poblacion")
+    @JoinColumn(name = "provincia")
     private Provincia provincia;
 
     @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)

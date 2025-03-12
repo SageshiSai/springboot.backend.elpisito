@@ -2,10 +2,19 @@ package com.ipartek.springboot.backend.elpisito.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
+@Entity
+@Table(name = "image")
 public class Imagen implements Serializable {
 
     @Serial
