@@ -36,6 +36,6 @@ public class Tipo implements Serializable {
 
     @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL)
     private Set<Inmueble> inmuebles;
-    
+
 
 }

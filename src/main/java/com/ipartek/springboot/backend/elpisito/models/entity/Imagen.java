@@ -1,9 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,9 +19,14 @@ public class Imagen implements Serializable {
     @Column
     private String name;
 
-    @Column Integer activo;
+    @Column Integer activo=1;
 
     public Integer getActivo() {
         return activo;
     }
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "inmueble")
+    private Inmueble inmueble;
 }

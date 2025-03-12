@@ -42,4 +42,8 @@ public class Provincia implements Serializable {
     public Integer getActivo() {
         return activo;
     }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "poblacion", cascade = CascadeType.ALL)
+    private Set<Inmueble> inmuebles;
 }

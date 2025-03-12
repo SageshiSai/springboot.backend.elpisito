@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -112,4 +113,11 @@ public class Inmueble implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo")
     private Tipo tipo;
+
+    @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
+    private Set<Imagen> imagenes;
+
+    @ManyToOne
+    @JoinColumn(name = "poblacion")
+    private Provincia provincia;
 }
