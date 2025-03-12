@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -32,5 +33,9 @@ public class Tipo implements Serializable {
     public Integer getActivo() {
         return activo;
     }
+
+    @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL)
+    private Set<Inmueble> inmuebles;
+    
 
 }

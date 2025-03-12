@@ -25,8 +25,91 @@ public class Inmueble implements Serializable {
     private Long id;
 
     @Column
-    private String name;
+    private String via; //Calle, plaza, carretera, avenida.....
 
     @Column
-    private Integer active;
+    private String claim; //Maravilloso Pisoo!!
+
+    @Column(name = "nombre_via")
+    private String nombreVia;
+
+    @Column
+    private String numero;
+
+    @Column
+    private String planta;
+
+    @Column
+    private String puerta; //Puerta a, b ... , h
+
+    @Column
+    private String apertura; //Exterior, Interior, agujero....
+
+    @Column
+    private String orientacion; //NORTE, SUR....
+
+    @Column
+    private String cp;
+
+    @Column
+    private String operacion; //Venta, alquiler, traspaso
+
+    @Column(name = "superficie_util")
+    private Double superficieUtil;
+
+    @Column(name = "superficie_construida")
+    private Double superficieConstruida;
+
+    @Column
+    private Double precio;
+
+    @Column(name = "numero_habitaciones")
+    private String numeroHabitaciones;
+
+    @Column(name = "numero_banhos")
+    private String numeroBanhos;
+
+    @Column(length = 3500)
+    private String decripcion; //Una amplia descripcion del inmueble
+
+    @Column(name = "tipo_calefaccion")
+    private String tipoCalefaccion; //ELECTRICA, GAS, SIN CALEFACCION...
+
+    @Column
+    private Integer amueblado;
+
+    @Column(name = "numero_balcones")
+    private Integer numeroBalcones;
+
+    @Column(name = "plazas_garaje")
+    private String plazasGaraje;
+
+    @Column
+    private Integer priscina;
+
+    @Column
+    private Integer trastero;
+
+    @Column
+    private Integer ascensor;
+
+    @Column
+    private Integer jardin;
+
+    @Column
+    private Integer tendedero;
+
+    @Column
+    private Integer portada=0;
+
+    @Column
+    private Integer activo=1;
+
+    public Integer getActivo() {
+        return activo;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "tipo")
+    private Tipo tipo;
 }
