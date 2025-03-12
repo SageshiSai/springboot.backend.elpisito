@@ -120,4 +120,7 @@ public class Inmueble implements Serializable {
     @ManyToOne
     @JoinColumn(name = "poblacion")
     private Provincia provincia;
+
+    @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
+    private Set<Archivo> archivos;
 }
