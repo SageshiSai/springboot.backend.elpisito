@@ -25,6 +25,7 @@ public class Poblacion implements Serializable {
     private Long id;
 
     @Column
+    @NonNull
     private String nombre;
 
     @Column

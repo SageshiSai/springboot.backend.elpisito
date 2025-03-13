@@ -30,6 +30,7 @@ public class Provincia implements Serializable {
 
 
     @Column
+    @NonNull
     private String nombre; //BIZKAIA, MADRID ....
 
     @Column
@@ -38,10 +39,6 @@ public class Provincia implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "provincia")
     private Set<Poblacion> poblaciones;
-
-    public Integer getActivo() {
-        return activo;
-    }
 
     @JsonIgnore
     @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
