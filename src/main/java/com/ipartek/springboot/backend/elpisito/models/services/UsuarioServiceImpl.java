@@ -26,9 +26,7 @@ public class UsuarioServiceImpl implements IGeneralService<Usuarios>{
     public List<Usuarios> findAllActive() {
 
         //Sustituye con native query methods de hibernate!!!
-        return findAll().stream()
-                .filter( u -> Integer.valueOf(1).equals(u.getActivo()))
-                .toList();
+        return usuarioDAO.findByActivo(1);
     }
 
     @Override

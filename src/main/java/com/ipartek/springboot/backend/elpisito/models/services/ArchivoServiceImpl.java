@@ -20,9 +20,7 @@ public class ArchivoServiceImpl implements IGeneralService<Archivo> {
 
     @Override
     public List<Archivo> findAllActive() {
-        return findAll().stream()
-                .filter( a -> Integer.valueOf(1).equals(a.getActivo()))
-                .toList();
+        return archivoDAO.findByActivo(1);
     }
 
     @Override

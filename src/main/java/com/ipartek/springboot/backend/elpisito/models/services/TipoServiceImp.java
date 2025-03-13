@@ -20,9 +20,7 @@ public class TipoServiceImp implements IGeneralService<Tipo>{
 
     @Override
     public List<Tipo> findAllActive() {
-        return findAll().stream()
-                .filter( t -> Integer.valueOf(1).equals(t.getActivo()))
-                .toList();
+        return iTipoDAO.findByActivo(1);
     }
 
     @Override

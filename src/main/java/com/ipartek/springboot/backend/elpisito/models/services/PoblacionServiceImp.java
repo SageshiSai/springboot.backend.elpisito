@@ -21,9 +21,7 @@ public class PoblacionServiceImp implements IGeneralService<Poblacion> {
 
     @Override
     public List<Poblacion> findAllActive() {
-        return findAll().stream()
-                .filter( p -> Integer.valueOf(1).equals(p.getActivo()))
-                .toList();
+        return iPoblacionDAO.findByActivo(1);
     }
 
     @Override

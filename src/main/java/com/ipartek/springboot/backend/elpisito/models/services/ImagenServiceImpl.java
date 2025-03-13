@@ -20,9 +20,7 @@ public class ImagenServiceImpl implements IGeneralService<Imagen> {
 
     @Override
     public List<Imagen> findAllActive() {
-        return findAll().stream()
-                .filter( i -> Integer.valueOf(1).equals(i.getActivo()))
-                .toList();
+        return imagenDAO.findByActivo(1);
     }
 
     @Override

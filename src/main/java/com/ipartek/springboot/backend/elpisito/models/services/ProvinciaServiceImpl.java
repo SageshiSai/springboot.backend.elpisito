@@ -21,9 +21,7 @@ public class ProvinciaServiceImpl implements IGeneralService<Provincia> {
 
     @Override
     public List<Provincia> findAllActive() {
-        return findAll().stream()
-                .filter(p -> Integer.valueOf(1).equals(p.getActivo()))
-                .toList();
+        return provinciaDAO.findByActivo(1);
     }
 
     @Override
