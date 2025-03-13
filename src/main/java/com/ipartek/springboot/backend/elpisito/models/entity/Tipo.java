@@ -25,14 +25,13 @@ public class Tipo implements Serializable {
     private Long id;
 
     @Column
+    @NonNull
     private String nombre; //chalet, piso, casa
 
     @Column
-    private Integer activo;
+    private Integer activo=1;
 
-    public Integer getActivo() {
-        return activo;
-    }
+
 
     @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL)
     private Set<Inmueble> inmuebles;
