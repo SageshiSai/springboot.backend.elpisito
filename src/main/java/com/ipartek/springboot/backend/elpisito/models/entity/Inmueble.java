@@ -14,6 +14,7 @@ import java.util.Set;
 @EqualsAndHashCode
 @ToString
 @Entity
+@Builder
 @Table(name = "inmuebles")
 public class Inmueble implements Serializable {
 
