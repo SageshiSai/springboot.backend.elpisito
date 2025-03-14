@@ -1,7 +1,6 @@
 package com.ipartek.springboot.backend.elpisito.storage;
 
-
-import com.ipartek.springboot.backend.elpisito.models.entity.Archivo;
+import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-public interface IArchivosStorageService {
+public interface IImagenStorageService {
 
     //Metodo auxiliar para "preparar" todo lo necesario para la subida de archivos
     void init() throws IOException;
@@ -20,8 +19,9 @@ public interface IArchivosStorageService {
 
     String store(MultipartFile file, Long idInmueble) throws RuntimeException;
     //Este metodo se encargara de devolvernos el recusrso(pdf,word...)
-    ResponseEntity<Resource> loadResource(String filename) throws RuntimeException;
+    Resource loadAsResource(String filename) throws RuntimeException;
 
-    //Este metodo devolvera un list con todos los archivos pertenecientes a un inmueble
-    List<Archivo> getArchivosByInmuebleId(Long idInmueble);
+    //Este metodo devolvera un list con todos las imagenes pertenecientes a un inmueble
+    List<Imagen> getImagenesByInmuebleId(Long idInmueble);
+
 }

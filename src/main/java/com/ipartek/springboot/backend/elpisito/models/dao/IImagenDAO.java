@@ -11,4 +11,5 @@ import java.util.List;
 public interface IImagenDAO extends CrudRepository<Imagen, Long> {
 
     List<Imagen> findByActivo(Integer activo);
+    List<Imagen> findByInmuebleId(Long id);
 }
