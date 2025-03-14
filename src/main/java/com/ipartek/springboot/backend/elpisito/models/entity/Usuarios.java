@@ -41,8 +41,5 @@ public class Usuarios implements Serializable{
 	@Column
 	private Integer activo;
 
-	public Integer getActivo() {
-		return activo;
-	}
 	
 }

@@ -32,11 +32,7 @@ public class Archivo implements Serializable {
     @Column
     private Integer activo=1;
 
-    public Integer getActivo() {
-        return activo;
-    }
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "inmueble")
     private Inmueble inmueble;

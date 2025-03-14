@@ -11,31 +11,43 @@ import java.util.List;
 public class TipoServiceImp implements IGeneralService<Tipo>{
 
     @Autowired
-    private ITipoDAO iTipoDAO;
+    private ITipoDAO tipoDAO;
+
 
     @Override
     public List<Tipo> findAll() {
-        return (List<Tipo>) iTipoDAO.findAll();
+
+        return (List<Tipo>) tipoDAO.findAll();
     }
 
     @Override
     public List<Tipo> findAllActive() {
-        return iTipoDAO.findByActivo(1);
+
+        //Sustituir con native query methods de hibernate!!!
+		/*return findAll().stream()
+		.filter(  a -> a.getActivo().equals(1))
+		.toList();*/
+
+        return tipoDAO.findByActivo(1);
+
     }
 
     @Override
     public Tipo findById(Long id) {
-        return iTipoDAO.findById(id).orElse(null);
+
+        return tipoDAO.findById(id).orElse(null);
     }
 
     @Override
-    public Tipo save(Tipo usuario) {
-        return iTipoDAO.save(usuario);
-    }
+    public Tipo save(Tipo tipo) {
 
+        return tipoDAO.save(tipo);
+    }
 
     @Override
     public void deleteById(Long id) {
-        iTipoDAO.deleteById(id);
+
+        tipoDAO.deleteById(id);
+
     }
 }

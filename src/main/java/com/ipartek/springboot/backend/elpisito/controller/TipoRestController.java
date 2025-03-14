@@ -14,35 +14,48 @@ import java.util.List;
 public class TipoRestController {
 
     @Autowired
-    private TipoServiceImp tipoService;
+    private IGeneralService<Tipo> tipoService;
 
     @GetMapping("/tipos")
     public List<Tipo> findAll(){
+
         return tipoService.findAll();
     }
 
+
     @GetMapping("/tipos-activos")
     public List<Tipo> findAllActive(){
+
         return tipoService.findAllActive();
+
     }
 
     @GetMapping("/tipo/{id}")
-    public Tipo findById(@PathVariable Long id){
+    public Tipo findById(@PathVariable Long id) {
+
         return tipoService.findById(id);
     }
 
+
     @PostMapping("/tipo")
-    public Tipo save(@RequestBody Tipo tipo){
+    public Tipo create(@RequestBody Tipo tipo) {
+
         return tipoService.save(tipo);
+
     }
+
 
     @PutMapping("/tipo")
-    public Tipo update(@RequestBody Tipo tipo){
+    public Tipo update(@RequestBody Tipo tipo) {
+
         return tipoService.save(tipo);
+
     }
 
+
     @DeleteMapping("/tipo/{id}")
-    public void delete(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id) {
+
         tipoService.deleteById(id);
     }
 }

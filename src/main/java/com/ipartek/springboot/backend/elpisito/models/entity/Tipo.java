@@ -1,5 +1,6 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,20 +21,22 @@ public class Tipo implements Serializable {
     @Serial
 	private static final long serialVersionUID = -2405395549485641981L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column
-    @NonNull
-    private String nombre; //chalet, piso, casa
+    private String nombre; //PISO, FINCA, CHALET INDIVIDUAL, CHALET ADOSADO...
+
+
 
     @Column
     private Integer activo=1;
 
 
-
-    @OneToMany(mappedBy = "tipo", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @OneToMany(mappedBy="tipo", cascade=CascadeType.ALL)
     private Set<Inmueble> inmuebles;
 
 

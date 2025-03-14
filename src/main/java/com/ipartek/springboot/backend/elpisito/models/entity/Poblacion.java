@@ -35,8 +35,4 @@ public class Poblacion implements Serializable {
     @JoinColumn(name = "provincia")
     private Provincia provincia; //Este es el mapped by de el @OneToMany
 
-
-    public Integer getActivo() {
-        return activo;
-    }
 }

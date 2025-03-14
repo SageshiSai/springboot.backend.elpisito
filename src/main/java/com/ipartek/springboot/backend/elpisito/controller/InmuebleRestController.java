@@ -2,6 +2,7 @@ package com.ipartek.springboot.backend.elpisito.controller;
 
 
 import com.ipartek.springboot.backend.elpisito.models.entity.Inmueble;
+import com.ipartek.springboot.backend.elpisito.models.services.IInmuebleService;
 import com.ipartek.springboot.backend.elpisito.models.services.InmuebleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,12 @@ import java.util.List;
 public class InmuebleRestController {
 
     @Autowired
-    private InmuebleServiceImpl inmuebleService;
+    private IInmuebleService inmuebleService;
 
 
     @GetMapping("/inmuebles")
     public List<Inmueble> findAll(){
-        return inmuebleService.findAll();
+        return (List<Inmueble>) inmuebleService.findAll();
     }
 
     @GetMapping("/inmuebles-activos")

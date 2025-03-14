@@ -30,11 +30,7 @@ public class Imagen implements Serializable {
 
     @Column Integer activo=1;
 
-    public Integer getActivo() {
-        return activo;
-    }
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "inmueble")
     private Inmueble inmueble;

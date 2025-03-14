@@ -1,5 +1,6 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,18 +22,19 @@ public class Inmueble implements Serializable {
     @Serial
 	private static final long serialVersionUID = -2246669607703879790L;
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
 
     @Column
-    private String via; //Calle, plaza, carretera, avenida.....
+    private String via; //CALLE,PLAZA,CARRETERA,AVENIDA...
+
 
     @Column
-    private String claim; //Maravilloso Pisoo!!
+    private String claim; //Maravilloso piso!!!!
 
-    @Column(name = "nombre_via")
+    @Column(name="nombre_via")
     private String nombreVia;
 
     @Column
@@ -41,80 +43,101 @@ public class Inmueble implements Serializable {
     @Column
     private String planta;
 
-    @Column
-    private String puerta; //Puerta a, b ... , h
 
     @Column
-    private String apertura; //Exterior, Interior, agujero....
+    private String puerta; //A,B,H...
+
 
     @Column
-    private String orientacion; //NORTE, SUR....
+    private String apertura; //EXTERIOR, INTERIOR...
+
+
+    @Column
+    private String orientacion; //NORTE,SUR...
+
 
     @Column
     private String cp;
 
-    @Column
-    private String operacion; //Venta, alquiler, traspaso
 
-    @Column(name = "superficie_util")
+
+    @Column
+    private String operacion; //VENTA, ALQUILER, TRASPASO...
+
+
+    @Column(name="superficie_util")
     private Double superficieUtil;
 
-    @Column(name = "superficie_construida")
+
+
+    @Column(name="superficie_construida")
     private Double superficieConstruida;
+
 
     @Column
     private Double precio;
 
-    @Column(name = "numero_habitaciones")
+
+    @Column(name="numero_habitaciones")
     private String numeroHabitaciones;
 
-    @Column(name = "numero_banhos")
+    @Column(name="numero_banhos")
     private String numeroBanhos;
 
-    @Column(length = 3500)
-    private String decripcion; //Una amplia descripcion del inmueble
 
-    @Column(name = "tipo_calefaccion")
-    private String tipoCalefaccion; //ELECTRICA, GAS, SIN CALEFACCION...
+    @Column(length = 3500)
+    private String descripcion; //Una amplia descripción del inmueble
+
+
+    @Column(name="tipo_calefaccion")
+    private String tipoCalefaccion; //ELÉCTRICA, GAS, SIN CALEFACCIÓN...
+
 
     @Column
-    private Integer amueblado;
+    private Integer amueblado; //1 amueblado, 0 no amueblado
 
-    @Column(name = "numero_balcones")
-    private Integer numeroBalcones;
 
-    @Column(name = "plazas_garaje")
+    @Column(name="numero_balcones")
+    private String numeroBalcones;
+
+
+    @Column(name="plazas_garaje")
     private String plazasGaraje;
 
+
     @Column
-    private Integer priscina;
+    private Integer piscina;
+
 
     @Column
     private Integer trastero;
 
+
     @Column
     private Integer ascensor;
+
 
     @Column
     private Integer jardin;
 
+
     @Column
     private Integer tendedero;
+
 
     @Column
     private Integer portada=0;
 
+
     @Column
     private Integer activo=1;
 
-    public Integer getActivo() {
-        return activo;
-    }
 
     @ManyToOne
     @JoinColumn(name = "tipo")
     private Tipo tipo;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
     private Set<Imagen> imagenes;
 
@@ -122,6 +145,7 @@ public class Inmueble implements Serializable {
     @JoinColumn(name = "provincia")
     private Provincia provincia;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
     private Set<Archivo> archivos;
 }
