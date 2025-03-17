@@ -30,6 +30,13 @@ public class Imagen implements Serializable {
 
     @Column Integer activo=1;
 
+    public void setInmueble(Inmueble inmueble) {
+        this.inmueble = inmueble;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @ManyToOne
     @JoinColumn(name = "inmueble")

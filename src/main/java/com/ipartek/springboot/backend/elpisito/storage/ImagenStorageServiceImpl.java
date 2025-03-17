@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,16 +45,18 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
     public void init() throws IOException {
         //iniciamos la ruta de almacenamiento
         rootLocation = Paths.get(mediaLocation); // El Path esta apuntando a la carpeta de destino
+        Files.createDirectories(rootLocation);
+
     }
 
     @Override
-    public String store(MultipartFile file, Long idInmueble) throws RuntimeException {
+    public String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException {
         //En este método vamos a bifurcar la taréa en dos fases:
         //1ª fase) la primera fase va a tener varios pasos a su vez (0, 1, 2, 3, 4)
         //Y can a consistir en crear un nombre para el almacenamiento del archivo fisico
         //Fase 2) Que va  a consistir en el registro en la BBDD (paso 5)
 
-        try{
+        //try{
 
             /// /////////////////////////////////////////////////////////////
             //FASE 1
@@ -63,7 +64,7 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
             //PASO 0
             if(file.isEmpty()){
                 throw new RuntimeException("No es posible almacenar un archivo vacío");
-                //Cuando lanzamos una exepsión con un throw new las líneas de código siguientes no se ejecutan jamás
+                //Cuando lanzamos una excepción con un throw new las líneas de código siguientes no se ejecutan jamás
             }
 
             /// /////////////////////////////////////////////////////////////
@@ -126,9 +127,9 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
 
             return nombreImagen;
 
-        }catch (IOException e){
-            throw new RuntimeException("Error al subir el archivo en al intentar su almacenamiento en el servidor");
-        }
+        //}catch (IOException e){
+        //    throw new RuntimeException("Error al subir el archivo en al intentar su almacenamiento en el servidor");
+        //}
 
     }
 
