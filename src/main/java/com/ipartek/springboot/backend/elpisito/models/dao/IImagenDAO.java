@@ -12,4 +12,5 @@ public interface IImagenDAO extends CrudRepository<Imagen, Long> {
 
     List<Imagen> findByActivo(Integer activo);
     List<Imagen> findByInmuebleId(Long id);
+    List<Imagen> findByInmuebleIdAndActivo(Long id, Integer activo);
 }

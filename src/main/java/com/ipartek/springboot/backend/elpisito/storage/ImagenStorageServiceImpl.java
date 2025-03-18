@@ -12,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -164,5 +165,25 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
             return List.of();
         }
         return imagenes;
+    }
+
+    @Override
+    public List<Imagen> getImagenesActivasByInmuebleId(Long idInmueble) {
+        //Obtener todas las imágenes asociadas al inmueble.
+        return imagenDAO.findByInmuebleIdAndActivo(idInmueble, 1);
+    }
+
+    @Override
+    public String getUrlCompletaImagen(String nombreImagen) {
+
+        String host = request.getRequestURL().toString().replace(request.getRequestURI(), ""); //"http://localhost:8080" (En desarrollo claro!!!...)
+
+        return ServletUriComponentsBuilder
+                .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
+                .path("/media/imagen/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
+                .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
+                .toUriString();
+
+
     }
 }

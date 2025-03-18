@@ -1,5 +1,6 @@
 package com.ipartek.springboot.backend.elpisito.controller;
 
+import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
 import com.ipartek.springboot.backend.elpisito.storage.IImagenStorageService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,7 +29,7 @@ public class ImagenStorageRestController {
     private HttpServletRequest request;
 
     @PostMapping("/upload/{idInmueble}")
-    public ResponseEntity<?> uploadFile(@RequestParam("imagen") MultipartFile multipartFile, @PathVariable Long idInmueble){
+    public ResponseEntity<?> uploadImagen(@RequestParam("imagen") MultipartFile multipartFile, @PathVariable Long idInmueble){
         //La anotación "file" hecha en @RequestParam es superimportante porque es la referencia que debemos emplear en cliente
 
         Map<String, String> response = new HashMap<>();
@@ -56,23 +58,60 @@ public class ImagenStorageRestController {
         response.put("url", url);
         return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK); //Utilizamos un 200 para indicar que todo esta bien
     }
-    //Este método nos devuelve la imagen física.
-    @GetMapping("imagen/{nombreImagen:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String nombreImagen){
-        Resource imagen  = imagenStorageService.loadAsResource(nombreImagen);
+    //Este método nos devuelve la imagen física
+    @GetMapping("/imagen/{nombreImagen:.+}")
+    public ResponseEntity<?> getImagen(@PathVariable String nombreImagen){
+
+        Map<String,String> response = new HashMap<>();
+        Resource imagen = null;
         String contentType = null;
+
         try {
-            //Extraemos el content type (tipo de contenido-Tipo MIME) para pasarlo en el header de la response
-        contentType = Files.probeContentType(imagen.getFile().toPath());
 
-        } catch (IOException e){
+            imagen = imagenStorageService.loadAsResource(nombreImagen);
+            //Extraemos el content type (Tipo de contenido-Tipo MIME) para pasarlo en el header de la response
+            contentType =  Files.probeContentType(imagen.getFile().toPath());
+        }catch(Exception e) {
 
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("mensaje","Error al cargar el recurso");
+            return new ResponseEntity<Map<String,String>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return ResponseEntity
                 .ok()
-                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .header(HttpHeaders.CONTENT_TYPE,contentType)
                 .body(imagen);
+
+    }
+
+
+    @GetMapping("/imagenes/{idInmueble}")
+    public ResponseEntity<?> getImagenesByInmuebleId(@PathVariable Long idInmueble){
+
+        Map<String, String> response = new HashMap<>();
+
+        try {
+
+            List<Imagen> imagenes = imagenStorageService.getImagenesActivasByInmuebleId(idInmueble);
+
+
+            if( imagenes.isEmpty() || imagenes == null) {
+
+                response.put("mensaje", "No se encontraron imágenes para este inmueble");
+                return new ResponseEntity<Map<String, String>>(response,HttpStatus.OK); //Enviamos un 200 porque no se han encontrado archivos pero no ha habido ningún problema...
+            }else {
+
+                return new ResponseEntity<List<Imagen>>(imagenes,HttpStatus.OK);
+
+            }
+
+        }catch (RuntimeException e) {
+
+            response.put("mensaje", "Error al obtener las imágenes del inmueble");
+            return new ResponseEntity<Map<String, String>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+
     }
 }

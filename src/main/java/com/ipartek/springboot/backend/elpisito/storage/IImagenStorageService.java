@@ -23,4 +23,8 @@ public interface IImagenStorageService {
     //Este método devolverá un list con todos las imágenes pertenecientes a un inmueble
     List<Imagen> getImagenesByInmuebleId(Long idInmueble);
 
+    List<Imagen> getImagenesActivasByInmuebleId(Long idInmueble);
+
+    //Este método devuelve la ruta completa de una imagen
+    String getUrlCompletaImagen(String nombreImagen);
 }
