@@ -6,6 +6,7 @@ import com.ipartek.springboot.backend.elpisito.models.dao.IInmuebleDAO;
 import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
 import com.ipartek.springboot.backend.elpisito.models.entity.Inmueble;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -32,6 +33,9 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
 
     @Autowired
     private IInmuebleDAO inmuebleDAO;
+
+    @Autowired
+    private HttpServletRequest request;
 
     //Con esta propiedad estamos indicando que la propiedad definida en "media.location" que esta en archivo
     //application.properties se refiere al nombre de la carpeta en la que queremos albergar los archivos fisicos
