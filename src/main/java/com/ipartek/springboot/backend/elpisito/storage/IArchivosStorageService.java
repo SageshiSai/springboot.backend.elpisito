@@ -3,6 +3,7 @@ package com.ipartek.springboot.backend.elpisito.storage;
 
 import com.ipartek.springboot.backend.elpisito.models.entity.Archivo;
 import org.springframework.core.io.Resource;
+import org.apache.tika.mime.MimeTypeException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,17 +12,20 @@ import java.util.List;
 
 public interface IArchivosStorageService {
 
-    //Metodo auxiliar para "preparar" todo lo necesario para la subida de archivos
+    //Método auxiliar para "preparar" todo lo necesario para la subida de archivos
     void init() throws IOException;
 
-    //Con este metodo, almacenaremos fisicamente el archivo en la carpeta de destino (mediafiles)
-    //Que está difinida en el application.properties
-    //Ademas, este metodo, hará la notacion en la BBDD
+    //Con este método almacenaremos FÍSICAMENTE el archivo en la carpeta de destino (mediafiles)
+    //que está definida en el application.properties
+    //Además, este método, hará la notación en la BBDD
+    String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException, MimeTypeException;
 
-    String store(MultipartFile file, Long idInmueble) throws RuntimeException;
-    //Este metodo se encargara de devolvernos el recusrso(pdf,word...)
-    ResponseEntity<Resource> loadResource(String filename) throws RuntimeException;
+    //Este método se encargará de devolvernos el recurso (pdf,word...)
+    ResponseEntity<Resource> loadAsResource(String filename) throws RuntimeException;
 
-    //Este metodo devolvera un list con todos los archivos pertenecientes a un inmueble
-    List<Archivo> getArchivosByInmuebleId(Long idInmueble);
+    //Este método devolverá un List con todos los archivos pertenecientes a un inmueble
+    List<Archivo> getArchivosActivosByInmuebleId(Long idInmueble);
+
+    //Este método devuelve la ruta completa de un archivo
+    String getUrlCompletaArchivo(String nombreArchivo);
 }

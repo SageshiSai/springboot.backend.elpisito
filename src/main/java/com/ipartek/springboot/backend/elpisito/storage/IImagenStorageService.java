@@ -1,6 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.storage;
 
 import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
+import org.apache.tika.mime.MimeTypeException;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,7 @@ public interface IImagenStorageService {
     //Que está definida en el application.properties
     //Ademas, este método, hará la notación en la BBDD
 
-    String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException;
+    String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException, MimeTypeException;
     //Este método se encargara de devolvernos el recursos(pdf,word...)
     Resource loadAsResource(String nombreImagen) throws RuntimeException;
 

@@ -1,9 +1,8 @@
 package com.ipartek.springboot.backend.elpisito.storage;
 
-
-import com.ipartek.springboot.backend.elpisito.models.dao.IImagenDAO;
+import com.ipartek.springboot.backend.elpisito.models.dao.IArchivoDAO;
 import com.ipartek.springboot.backend.elpisito.models.dao.IInmuebleDAO;
-import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
+import com.ipartek.springboot.backend.elpisito.models.entity.Archivo;
 import com.ipartek.springboot.backend.elpisito.models.entity.Inmueble;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,14 +12,12 @@ import org.apache.tika.mime.MimeTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,11 +26,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-@Service
-public class ImagenStorageServiceImpl implements IImagenStorageService{
+public class ArchivoStorageServiceImpl implements IArchivosStorageService {
 
     @Autowired
-    private IImagenDAO imagenDAO;
+    private IArchivoDAO archivoDAO;
 
     @Autowired
     private IInmuebleDAO inmuebleDAO;
@@ -52,9 +48,9 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
     private Path rootLocation;
 
 
-
     @Override
-    @PostConstruct //Cuando un método está anotado con @PostConstruct el método es llamado automáticamente en el momento en que la clase se instancia
+    @PostConstruct
+    //Cuando un método está anotado con @PostConstruct el método es llamado automáticamente en el momento en que la clase se instancia
     public void init() throws IOException {
 
         //Iniciamos la ruta de almacenamiento
@@ -62,8 +58,6 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
         Files.createDirectories(rootLocation);
 
     }
-
-
 
     @Override
     public String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException, MimeTypeException {
@@ -75,7 +69,7 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
         //físico a un directorio de un servidor
         //2 FASE) Que va a consistir en el registro en al BBDD (paso 5)
 
-        //try {
+
 
         /////////////////////////////////////////////////////
         //FASE 1
@@ -104,24 +98,16 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
 			String tipo = "." + tipoMIME.substring(tipoMIME.lastIndexOf("/") + 1); //".jpeg", ".pdf", ".png"
 			*/
 
-        //En nuestro caso solo vamos a dejar subir archivos .jpg
-
-        if(tipo.equals(".jpeg")) {
-            tipo = ".jpg";
-        }
-
         //En nuestro caso solo vamos a dejar subir archivos de estos tipos:
-        List<String> tiposPermitidos = Arrays.asList(".jpg"); //añadir a esta lista los tipos permitidos
+        List<String> tiposPermitidos = Arrays.asList(".pdf",".doc",".docx",".xls",".xlsx",".mp4");//añadir a esta lista los tipos permitidos
 
         if(!tiposPermitidos.contains(tipo)) {
 
-            throw new RuntimeException("Error al subir el archivo. El archivo subido no es una imagen jpg");
+            throw new RuntimeException("Error al subir el archivo. El archivo subido no es tipo de archivo permitido");
         }
 
 
-
-
-			/*if(!tipo.equals(".jpg")){
+			/*if(!tipo.equals(".pdf")){
 
 				throw new RuntimeException("Error al subir el archivo. La archivo subido no es una imagen jpg");
 				//Cuando lanzamos una excepción con un throw new las líneas de código siguientes no se ejecutan jamás
@@ -131,14 +117,14 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
 
         //PASO 2: En este paso vamos a crear el nombre del archivo a partir de la clase Calendar
 
-        String nombreImagen = String.valueOf(Calendar.getInstance().getTimeInMillis());
+        String nombreArchivo = String.valueOf(Calendar.getInstance().getTimeInMillis());
 
         //De esta forma conseguimos en nombre en el que vamos a guardar la imagen en la BBDD
-        nombreImagen = nombreImagen.concat(tipo); //"6474847847474747.jpg"
+        nombreArchivo = nombreArchivo.concat(tipo); //"6474847847474747.pdf"...etc.
 
 
-        //PASO 3: Vamos a añadir el String nombreImagen a la ruta prefijada de destino de almacenamiento (que estaba incompleta)
-        Path pathDestino =  rootLocation.resolve(Paths.get(nombreImagen)); //Ya tenemos el Path completo de destino
+        //PASO 3: Vamos a añadir el String nombreArchivo a la ruta prefijada de destino de almacenamiento (que estaba incompleta)
+        Path pathDestino =  rootLocation.resolve(Paths.get(nombreArchivo)); //Ya tenemos el Path completo de destino
 
         //PASO 4: Ahora movemos el archivo FÍSICAMENTE a su destino final
         //Esta operación la tenemos que meter en un try con recursos. Vamos a recordar
@@ -172,92 +158,34 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
         //consecuencia (excepto el hecho de que está ocupando espacio). Por esta razón
         //la subida física del archivo la realizamos en primer lugar.
 
-        Imagen imagen = new Imagen();
+        Archivo archivo = new Archivo();
         Inmueble inmueble = inmuebleDAO.findById(idInmueble).orElse(null);
-        imagen.setName(nombreImagen);
-        imagen.setInmueble(inmueble);
+        archivo.setName(nombreArchivo);
+        archivo.setInmueble(inmueble);
 
-        imagenDAO.save(imagen); //En este momento registramos la imagen en la BBDD
+        archivoDAO.save(archivo); //En este momento registramos la imagen en la BBDD
 
-        return nombreImagen;
-
-
-		/*}catch(IOException e) {
-
-			throw new RuntimeException("Error al subir el archivo al intentar su almacenamiento en el servidor");
+        return nombreArchivo;
 
 
-		}	*/
-
-
-
-    }
-
-
-
-
-
-
-
-    @Override
-    public Resource loadAsResource(String nombreImagen) throws RuntimeException {
-
-        //Vamos a obtener el path real del archivo
-        Path rutaCompleta = rootLocation.resolve(Paths.get(nombreImagen));
-
-        try {
-            //Extraemos un objeto de tipo Resource del objeto Path que contiene la ruta completa
-            Resource resource = new UrlResource(rutaCompleta.toUri());
-
-            //Vamos a comprobar si existe esa ruta al archivo...
-            if(resource.exists() || resource.isReadable()) {
-
-                return resource;
-
-            }else {
-
-                throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
-            }
-
-
-        }catch(MalformedURLException e) {
-
-            throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
-
-        }
 
 
     }
 
     @Override
-    public List<Imagen> getImagenesByInmuebleId(Long idInmueble) {
-        return imagenDAO.findByInmuebleId(idInmueble);
+    public ResponseEntity<Resource> loadAsResource(String filename) throws RuntimeException {
+        return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
     }
-
 
     @Override
-    public List<Imagen> getImagenesActivasByInmuebleId(Long idInmueble) {
-
-        //Obtener todas las imágenes asociadas al inmueble
-
-        return imagenDAO.findByInmuebleIdAndActivo(idInmueble,1);
-
-
+    public List<Archivo> getArchivosActivosByInmuebleId(Long idInmueble) {
+        return List.of();
     }
-
-
 
     @Override
-    public String getUrlCompletaImagen(String nombreImagen) {
-
-        String host = request.getRequestURL().toString().replace(request.getRequestURI(), ""); //"http://localhost:8080" (En desarrollo claro!!!...)
-
-        return ServletUriComponentsBuilder
-                .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
-                .path("/media/imagen/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
-                .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
-                .toUriString();
-
-
+    public String getUrlCompletaArchivo(String nombreArchivo) {
+        return "";
     }
+
+
 }
