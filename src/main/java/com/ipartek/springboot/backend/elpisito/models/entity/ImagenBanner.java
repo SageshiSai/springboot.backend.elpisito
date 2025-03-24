@@ -34,5 +34,5 @@ public class ImagenBanner implements Serializable {
     @JsonBackReference
     @JoinColumn(name = "banner")
     private BannerHorizontal banner;
-    
+
 }

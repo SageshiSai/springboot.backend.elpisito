@@ -240,7 +240,7 @@ public class ImagenStorageServiceImpl implements IImagenStorageService{
 
         //Obtener todas las imágenes asociadas al inmueble
 
-        return imagenDAO.findByInmuebleIdAndActivo(idInmueble,1);
+        return imagenDAO.findByInmuebleIdAndActivo(idInmueble, 1);
 
 
     }

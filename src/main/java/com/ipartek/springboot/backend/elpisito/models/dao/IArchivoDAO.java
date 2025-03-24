@@ -10,4 +10,6 @@ import java.util.List;
 public interface IArchivoDAO extends CrudRepository<Archivo, Long> {
 
     List<Archivo> findByActivo(Integer activo);
+
+    List<Archivo> findByInmuebleIdAndActivo(Long idInmueble, Integer activo);
 }

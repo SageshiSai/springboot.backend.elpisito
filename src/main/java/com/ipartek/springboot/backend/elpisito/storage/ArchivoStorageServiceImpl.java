@@ -12,12 +12,13 @@ import org.apache.tika.mime.MimeTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -173,19 +174,51 @@ public class ArchivoStorageServiceImpl implements IArchivosStorageService {
     }
 
     @Override
-    public ResponseEntity<Resource> loadAsResource(String filename) throws RuntimeException {
-        return new ResponseEntity<Resource>(HttpStatus.BAD_REQUEST);
+    public Resource loadAsResource(String nombreImagen) throws RuntimeException {
+
+        //Vamos a obtener el path real del archivo
+        Path rutaCompleta = rootLocation.resolve(Paths.get(nombreImagen));
+
+        try {
+            //Extraemos un objeto de tipo Resource del objeto Path que contiene la ruta completa
+            Resource resource = new UrlResource(rutaCompleta.toUri());
+
+            //Vamos a comprobar si existe esa ruta al archivo...
+            if(resource.exists() || resource.isReadable()) {
+
+                return resource;
+
+            }else {
+
+                throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
+            }
+
+
+        }catch(MalformedURLException e) {
+
+            throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
+
+        }
+
+
     }
 
     @Override
     public List<Archivo> getArchivosActivosByInmuebleId(Long idInmueble) {
-        return List.of();
+        return archivoDAO.findByInmuebleIdAndActivo(idInmueble, 1);
     }
 
     @Override
-    public String getUrlCompletaArchivo(String nombreArchivo) {
-        return "";
+    public String getUrlCompletaArchivo(String nombreImagen) {
+
+        String host = request.getRequestURL().toString().replace(request.getRequestURI(), ""); //"http://localhost:8080" (En desarrollo claro!!!...)
+
+        return ServletUriComponentsBuilder
+                .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
+                .path("/media/imagen/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
+                .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
+                .toUriString();
+
+
     }
-
-
 }

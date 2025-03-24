@@ -21,7 +21,7 @@ public interface IArchivosStorageService {
     String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException, MimeTypeException;
 
     //Este método se encargará de devolvernos el recurso (pdf,word...)
-    ResponseEntity<Resource> loadAsResource(String filename) throws RuntimeException;
+    Resource loadAsResource(String filename) throws RuntimeException;
 
     //Este método devolverá un List con todos los archivos pertenecientes a un inmueble
     List<Archivo> getArchivosActivosByInmuebleId(Long idInmueble);
