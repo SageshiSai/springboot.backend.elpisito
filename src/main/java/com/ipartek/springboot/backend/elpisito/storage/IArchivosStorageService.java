@@ -4,7 +4,6 @@ package com.ipartek.springboot.backend.elpisito.storage;
 import com.ipartek.springboot.backend.elpisito.models.entity.Archivo;
 import org.springframework.core.io.Resource;
 import org.apache.tika.mime.MimeTypeException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

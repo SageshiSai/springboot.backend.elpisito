@@ -37,4 +37,8 @@ public class BannerHorizontalServiceImpl implements IGeneralService<BannerHorizo
     public void deleteById(Long id) {
         bannerHorizontalDAO.deleteById(id);
     }
+
+    public List<BannerHorizontal> findByActivoAndHome(){
+        return bannerHorizontalDAO.findByActivoAndHome(1,1);
+    }
 }

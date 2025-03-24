@@ -28,18 +28,11 @@ public class Imagen implements Serializable {
     @Column
     private String name;
 
-    @Column 
+    @Column
     Integer activo=1;
 
-    public void setInmueble(Inmueble inmueble) {
-        this.inmueble = inmueble;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "inmueble")
     private Inmueble inmueble;
 }

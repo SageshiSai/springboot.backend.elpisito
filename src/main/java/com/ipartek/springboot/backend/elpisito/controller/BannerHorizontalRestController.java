@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = ("http://localhost:4200"))
 @RestController
 @RequestMapping("/api")
 public class BannerHorizontalRestController {
@@ -23,6 +24,11 @@ public class BannerHorizontalRestController {
     @GetMapping("/banners-h-activos")
     public List<BannerHorizontal> findAllActive(){
         return bannerHorizontalService.findAllActive();
+    }
+
+    @GetMapping("/banners-h-activos-home")
+    public List<BannerHorizontal> findActivosHome(){
+        return bannerHorizontalService.findByActivoAndHome();
     }
 
     @GetMapping("/banner-h/{id}")

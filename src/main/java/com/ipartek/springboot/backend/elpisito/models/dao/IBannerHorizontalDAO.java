@@ -10,4 +10,5 @@ import java.util.List;
 public interface IBannerHorizontalDAO extends CrudRepository<BannerHorizontal, Long> {
 
     List<BannerHorizontal> findByActivo(Integer activo);
+    List<BannerHorizontal> findByActivoAndHome(Integer activo, Integer home);
 }

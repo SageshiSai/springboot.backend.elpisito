@@ -44,6 +44,9 @@ public class BannerHorizontal implements Serializable {
     @Column(name = "texto_link")
     private String textoLink;
 
+    @Column
+    private Integer home;
+
     @JsonManagedReference
     @OneToOne(mappedBy = "banner")
     private ImagenBanner imagen;

@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface IImagenBannerDAO extends CrudRepository<ImagenBanner, Long> {
 
-    List<ImagenBanner> findByBannerHorizontalId(Long idBanner);
 }
