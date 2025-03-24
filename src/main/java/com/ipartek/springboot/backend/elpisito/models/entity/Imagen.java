@@ -28,7 +28,8 @@ public class Imagen implements Serializable {
     @Column
     private String name;
 
-    @Column Integer activo=1;
+    @Column 
+    Integer activo=1;
 
     public void setInmueble(Inmueble inmueble) {
         this.inmueble = inmueble;
