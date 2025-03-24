@@ -1,6 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -43,6 +44,7 @@ public class BannerHorizontal implements Serializable {
     @Column(name = "texto_link")
     private String textoLink;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "banner")
     private ImagenBanner imagen;
 }

@@ -1,5 +1,6 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,9 +31,8 @@ public class ImagenBanner implements Serializable {
     @Column Integer activo=1;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "banner")
     private BannerHorizontal banner;
-
-
-
+    
 }
