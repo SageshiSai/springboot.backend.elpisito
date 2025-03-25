@@ -217,7 +217,7 @@ public class ArchivoStorageServiceImpl implements IArchivosStorageService {
 
         return ServletUriComponentsBuilder
                 .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
-                .path("/media/imagen/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
+                .path("/media/archivo/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
                 .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
                 .toUriString();
 

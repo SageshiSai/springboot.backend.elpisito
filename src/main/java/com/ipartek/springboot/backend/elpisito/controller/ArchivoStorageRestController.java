@@ -20,16 +20,17 @@ import java.util.Map;
 
 @CrossOrigin(origins = ("http://localhost:4200"))
 @RestController
-@RequestMapping("/media/file")
+@RequestMapping("/media")
 public class ArchivoStorageRestController {
 
     @Autowired
-    private IArchivosStorageService archivosStorageService; //Podemos utilizar la Interface (IImagenStorageService) en vez de la implementación (ImagenStorageServiceImpl) porque polimorficamente son compatibles
+    private IArchivosStorageService archivoStorageService; //Podemos utilizar la Interface (IArchivoStorageService) en vez de la implementación (ArchivoStorageServiceImpl) porque polimorficamente son compatibles
+
 
 
 
     @PostMapping("/archivo/{idInmueble}")
-    public ResponseEntity<?> uploadImagen(@RequestParam("archivo") MultipartFile multipartFile, @PathVariable Long idInmueble) {
+    public ResponseEntity<?> uploadArchivo(@RequestParam("archivo") MultipartFile multipartFile, @PathVariable Long idInmueble) {
         //La anotación "archivo" hecha en @RequestParam es super importante porque es la referencia que
         //debemos emplear en cliente
 
@@ -39,14 +40,14 @@ public class ArchivoStorageRestController {
 
         try {
 
-            String nombreImagen = archivosStorageService.store(multipartFile,idInmueble);
+            String nombreArchivo = archivoStorageService.store(multipartFile,idInmueble);
             //EN ESTE PUNTO EL ARCHIVO FÍSICO YA ESTÁ SUBIDO Y LA ANOTACIÓN EFECTUADA EN LA BBDD
 
-            //A PARTIR DE ESTE PUNTO LO QUE VAMOS A HACER ES CONSEGUIR LA URL COMPLETA DE LA IMAGEN
+            //A PARTIR DE ESTE PUNTO LO QUE VAMOS A HACER ES CONSEGUIR LA URL COMPLETA DEL ARCHIVO
             //SUBIDA PARA DEVOLVERLA EN EL RESPONSE (response)
             //Vamos a conseguir la URL completa del archivo...
 
-            url = archivosStorageService.getUrlCompletaArchivo(nombreImagen);
+            url = archivoStorageService.getUrlCompletaArchivo(nombreArchivo);
 
         }catch(RuntimeException e) {
 
@@ -78,9 +79,12 @@ public class ArchivoStorageRestController {
 
     }
 
-    //Este método nos devuelve la imagen física
-    @GetMapping("/archivo/{nombreImagen:.+}")
-    public ResponseEntity<?> getImagen(@PathVariable String nombreImagen){
+
+
+
+    //Este método nos devuelve el archivo físico
+    @GetMapping("/archivo/{nombreArchivo:.+}")
+    public ResponseEntity<?> getArchivo(@PathVariable String nombreArchivo){
 
         Map<String,String> response = new HashMap<>();
         Resource archivo = null;
@@ -88,9 +92,12 @@ public class ArchivoStorageRestController {
 
         try {
 
-            archivo = archivosStorageService.loadAsResource(nombreImagen);
+            archivo = archivoStorageService.loadAsResource(nombreArchivo);
+
             //Extraemos el content type (Tipo de contenido-Tipo MIME) para pasarlo en el header de la response
             contentType =  Files.probeContentType(archivo.getFile().toPath());
+
+
         }catch(Exception e) {
 
             response.put("mensaje","Error al cargar el recurso");
@@ -105,19 +112,20 @@ public class ArchivoStorageRestController {
     }
 
 
-    @GetMapping("/archivo/{idInmueble}")
-    public ResponseEntity<?> getImagenesByInmuebleId(@PathVariable Long idInmueble){
+
+    @GetMapping("/archivos/{idInmueble}")
+    public ResponseEntity<?> getArchivosByInmuebleId(@PathVariable Long idInmueble){
 
         Map<String, String> response = new HashMap<>();
 
         try {
 
-            List<Archivo> archivos = archivosStorageService.getArchivosActivosByInmuebleId(idInmueble);
+            List<Archivo> archivos = archivoStorageService.getArchivosActivosByInmuebleId(idInmueble);
 
 
             if( archivos.isEmpty() || archivos == null) {
 
-                response.put("mensaje", "No se encontraron imágenes para este inmueble");
+                response.put("mensaje", "No se encontraron archivos para este inmueble");
                 return new ResponseEntity<Map<String, String>>(response,HttpStatus.OK); //Enviamos un 200 porque no se han encontrado archivos pero no ha habido ningún problema...
             }else {
 
@@ -127,10 +135,14 @@ public class ArchivoStorageRestController {
 
         }catch (RuntimeException e) {
 
-            response.put("mensaje", "Error al obtener las imágenes del inmueble");
+            response.put("mensaje", "Error al obtener los archivos del inmueble");
             return new ResponseEntity<Map<String, String>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
+
     }
+
+
 }
+
