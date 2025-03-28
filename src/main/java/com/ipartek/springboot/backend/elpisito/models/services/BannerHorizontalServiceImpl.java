@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BannerHorizontalServiceImpl implements IGeneralService<BannerHorizontal> {
+public class BannerHorizontalServiceImpl implements IBannerHorizontalService {
 
     @Autowired
     private IBannerHorizontalDAO bannerHorizontalDAO;

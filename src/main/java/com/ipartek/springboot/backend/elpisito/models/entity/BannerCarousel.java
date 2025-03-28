@@ -1,7 +1,5 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,12 +12,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @ToString
 @Entity
-@EqualsAndHashCode
-@Table(name="banners_horizontales")
-public class BannerHorizontal implements Serializable {
+@Table(name="banners_carousel")
+public class BannerCarousel implements Serializable {
 
-	@Serial
-	private static final long serialVersionUID = -2539342254321679493L;
+    @Serial
+    private static final long serialVersionUID = 4325969584571100023L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,15 +36,12 @@ public class BannerHorizontal implements Serializable {
     private String claim;
 
     @Column
-    private String link;
-
-    @Column
-    private Integer home=0;
-
-    @Column(name= "texto_link")
-    private String textoLink;
-
+    private String tematica;//primavera,otoño,verano,invierno,navidad
 
     @OneToOne(mappedBy = "banner")
-    private ImagenBanner imagen;
+    private ImagenCarousel imagen;
+
+
+
+
 }

@@ -1,10 +1,9 @@
 package com.ipartek.springboot.backend.elpisito.storage;
 
-
-import com.ipartek.springboot.backend.elpisito.models.dao.IBannerHorizontalDAO;
-import com.ipartek.springboot.backend.elpisito.models.dao.IImagenBannerDAO;
-import com.ipartek.springboot.backend.elpisito.models.entity.BannerHorizontal;
-import com.ipartek.springboot.backend.elpisito.models.entity.ImagenBanner;
+import com.ipartek.springboot.backend.elpisito.models.dao.IBannerCarouselDAO;
+import com.ipartek.springboot.backend.elpisito.models.dao.IImagenCarouselDAO;
+import com.ipartek.springboot.backend.elpisito.models.entity.BannerCarousel;
+import com.ipartek.springboot.backend.elpisito.models.entity.ImagenCarousel;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.tika.mime.MimeType;
@@ -30,18 +29,16 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
-public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageService {
-
-
-    @Autowired
-    private IImagenBannerDAO imagenBannerDAO;
+public class ImagenCarouselStorageServiceImpl implements IImagenCarouselStorageService {
 
     @Autowired
-    private IBannerHorizontalDAO bannerHorizontalDAO;
+    private IImagenCarouselDAO imagenCarouselDAO;
+
+    @Autowired
+    private IBannerCarouselDAO bannerCarouselDAO;
 
     @Autowired
     private HttpServletRequest request;
-
 
     //CON ESTA PROPIEDAD ESTAMOS INDICANDO QUE LA PROPIEDAD DEFINIDA EN
     //"media.location" que está en el archivo application-properties
@@ -67,7 +64,6 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
     @Override
     public String store(MultipartFile file, Long idBanner) throws RuntimeException, IOException, MimeTypeException {
-
 
         //En este método vamos a bifurcar la taréa en dos fases:
         //1 FASE) La primera fase va a tener varios pasos a su vez (0,1,2,3,4)
@@ -161,16 +157,16 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
         //consecuencia (excepto el hecho de que está ocupando espacio). Por esta razón
         //la subida física del archivo la realizamos en primer lugar.
 
-        ImagenBanner imagenBanner = new ImagenBanner();
-        BannerHorizontal bannerHorizontal = bannerHorizontalDAO.findById(idBanner).orElse(null);
-        imagenBanner.setNombre(nombreImagen);
-        imagenBanner.setBanner(bannerHorizontal);
+        ImagenCarousel imagenCarousel = new ImagenCarousel();
+        BannerCarousel bannerCarousel = bannerCarouselDAO.findById(idBanner).orElse(null);
+        imagenCarousel.setNombre(nombreImagen);
+        imagenCarousel.setBanner(bannerCarousel);
 
         try {
-            imagenBannerDAO.save(imagenBanner); //En este momento registramos la imagen en la BBDD
+            imagenCarouselDAO.save(imagenCarousel); //En este momento registramos la imagen en la BBDD
         }catch (RuntimeException e) {
             //BORRAR LA IMAGEN FISICA DE LA CARPETA mediafiles???
-            throw new RuntimeException("Error al registrar la imagen en la BBDD porque un banner horizontal solo puede tener una imagen que ya existe");
+            throw new RuntimeException("Error al registrar la imagen en la BBDD porque un banner carousel solo puede tener una imagen que ya existe");
         }
 
 
@@ -178,11 +174,13 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
 
 
+
+
+
     }
 
     @Override
     public Resource loadAsResource(String nombreImagen) throws RuntimeException {
-
 
 
         //Vamos a obtener el path real del archivo
@@ -208,6 +206,7 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
             throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
 
         }
+
     }
 
     @Override
@@ -217,14 +216,10 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
         return ServletUriComponentsBuilder
                 .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
-                .path("/media/imagen-banner/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
+                .path("/media/imagen-carousel/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen/"
                 .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
                 .toUriString();
 
-
-
     }
-
-
 
 }
