@@ -1,10 +1,9 @@
 package com.ipartek.springboot.backend.elpisito.storage;
 
-
-import com.ipartek.springboot.backend.elpisito.models.dao.IBannerHorizontalDAO;
-import com.ipartek.springboot.backend.elpisito.models.dao.IImagenBannerDAO;
-import com.ipartek.springboot.backend.elpisito.models.entity.BannerHorizontal;
-import com.ipartek.springboot.backend.elpisito.models.entity.ImagenBanner;
+import com.ipartek.springboot.backend.elpisito.models.dao.IImagenLogoDAO;
+import com.ipartek.springboot.backend.elpisito.models.dao.IInmobiliariaDAO;
+import com.ipartek.springboot.backend.elpisito.models.entity.ImagenLogo;
+import com.ipartek.springboot.backend.elpisito.models.entity.Inmobiliaria;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.tika.mime.MimeType;
@@ -30,12 +29,13 @@ import java.util.Calendar;
 import java.util.List;
 
 @Service
-public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageService {
-    @Autowired
-    private IImagenBannerDAO imagenBannerDAO;
+public class ImagenLogoStorageServiceImpl implements IImagenLogoStorageService{
 
     @Autowired
-    private IBannerHorizontalDAO bannerHorizontalDAO;
+    private IImagenLogoDAO imagenLogoDAO;
+
+    @Autowired
+    private IInmobiliariaDAO inmobiliariaDAO;
 
     @Autowired
     private HttpServletRequest request;
@@ -53,18 +53,17 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
 
 
-
     @Override
     @PostConstruct
     public void init() throws IOException {
-        //Iniciamos la ruta de almacenamiento
+
         rootLocation = Paths.get(mediaLocation);//El Path está apuntando a la carpeta de destino
         Files.createDirectories(rootLocation);
-
     }
 
     @Override
-    public String store(MultipartFile file, Long idBanner) throws RuntimeException, IOException, MimeTypeException {
+    public String store(MultipartFile file, Long idInmobiliaria)
+            throws RuntimeException, IOException, MimeTypeException {
 
 
         //En este método vamos a bifurcar la taréa en dos fases:
@@ -159,16 +158,16 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
         //consecuencia (excepto el hecho de que está ocupando espacio). Por esta razón
         //la subida física del archivo la realizamos en primer lugar.
 
-        ImagenBanner imagenBanner = new ImagenBanner();
-        BannerHorizontal bannerHorizontal = bannerHorizontalDAO.findById(idBanner).orElse(null);
-        imagenBanner.setNombre(nombreImagen);
-        imagenBanner.setBanner(bannerHorizontal);
+        ImagenLogo imagenLogo = new ImagenLogo();
+        Inmobiliaria inmobiliaria = inmobiliariaDAO.findById(idInmobiliaria).orElse(null);
+        imagenLogo.setNombre(nombreImagen);
+        imagenLogo.setInmobiliaria(inmobiliaria);
 
         try {
-            imagenBannerDAO.save(imagenBanner); //En este momento registramos la imagen en la BBDD
+            imagenLogoDAO.save(imagenLogo); //En este momento registramos la imagen en la BBDD
         }catch (RuntimeException e) {
             //BORRAR LA IMAGEN FISICA DE LA CARPETA mediafiles???
-            throw new RuntimeException("Error al registrar la imagen en la BBDD porque un banner horizontal solo puede tener una imagen que ya existe");
+            throw new RuntimeException("Error al registrar la imagen en la BBDD porque una inmobiliaria solo puede tener un logo que ya existe");
         }
 
 
@@ -176,12 +175,11 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
 
 
+
     }
 
     @Override
     public Resource loadAsResource(String nombreImagen) throws RuntimeException {
-
-
 
         //Vamos a obtener el path real del archivo
         Path rutaCompleta = rootLocation.resolve(Paths.get(nombreImagen));
@@ -206,6 +204,7 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
             throw new RuntimeException("Error al leer el archivo. No se puede leer el archivo " + nombreImagen);
 
         }
+
     }
 
     @Override
@@ -215,14 +214,10 @@ public class ImagenBannerStorageServiceImpl implements IImagenBannerStorageServi
 
         return ServletUriComponentsBuilder
                 .fromUriString(host) //Añadimos la primera parte "http://localhost:8080"
-                .path("/media/imagen-banner/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen-banner/"
+                .path("/media/imagen-logo/") //Añadimos la ruta donde se encuentra el recurso "http://localhost:8080/media/imagen-logo/"
                 .path(nombreImagen) //"http://localhost:8080/media/imagen/879378930369036890.jpg"
                 .toUriString();
 
-
-
     }
-
-
 
 }

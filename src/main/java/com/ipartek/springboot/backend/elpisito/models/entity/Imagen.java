@@ -32,7 +32,6 @@ public class Imagen implements Serializable {
     Integer activo=1;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "inmueble")
     private Inmueble inmueble;
 }

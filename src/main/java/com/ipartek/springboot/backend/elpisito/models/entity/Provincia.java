@@ -1,7 +1,9 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,11 +38,7 @@ public class Provincia implements Serializable {
     @Column
     private Integer activo = 1;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "provincia")
+    @JsonIgnore       //@JsonManagedReference
+    @OneToMany(mappedBy = "provincia") //Una Provincia puede tener muchas Poblaciones
     private Set<Poblacion> poblaciones;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "provincia", cascade = CascadeType.ALL)
-    private Set<Inmueble> inmuebles;
 }

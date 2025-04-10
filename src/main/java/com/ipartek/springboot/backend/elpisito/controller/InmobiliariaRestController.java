@@ -1,10 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.controller;
 
-import com.ipartek.springboot.backend.elpisito.models.entity.Provincia;
+import com.ipartek.springboot.backend.elpisito.models.entity.Inmobiliaria;
 import com.ipartek.springboot.backend.elpisito.models.services.IGeneralService;
-import com.ipartek.springboot.backend.elpisito.models.services.ProvinciaServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,158 +16,153 @@ import java.util.Map;
 @CrossOrigin(origins = ("http://localhost:4200"))
 @RestController
 @RequestMapping("/api")
-public class ProvinciaRestController {
+public class InmobiliariaRestController {
+
 
     @Autowired
-    private IGeneralService<Provincia> provinciaService;
+    private IGeneralService<Inmobiliaria> inmobiliariaService;
 
-    @GetMapping("/provincias")
+
+    @GetMapping("/inmobiliarias")
     public ResponseEntity<?> findAll(){
 
         Map<String, Object> response = new HashMap<>();
-        List<Provincia> resultado = new ArrayList<>();
+        List<Inmobiliaria> resultado = new ArrayList<>();
 
         try {
 
-            resultado =	provinciaService.findAll();
+            resultado =	inmobiliariaService.findAll();
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al realizar la búsqueda de todas las provincias en la BBDD");
+            response.put("mensaje", "Error al realizar la búsqueda de todas las inmobiliarias en la BBDD");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        return new ResponseEntity<List<Provincia>>(resultado,HttpStatus.OK); //200
+        return new ResponseEntity<List<Inmobiliaria>>(resultado,HttpStatus.OK); //200
 
     }
 
 
-    @GetMapping("/provincias-activas")
+    @GetMapping("/inmobiliarias-activas")
     public ResponseEntity<?> findAllActive(){
 
         Map<String, Object> response = new HashMap<>();
-        List<Provincia> resultado = new ArrayList<>();
+        List<Inmobiliaria> resultado = new ArrayList<>();
 
         try {
 
-            resultado =	provinciaService.findAllActive();
+            resultado =	inmobiliariaService.findAllActive();
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al realizar la búsqueda de todas las provincias activas en la BBDD");
+            response.put("mensaje", "Error al realizar la búsqueda de todas las inmobiliarias activas en la BBDD");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        return new ResponseEntity<List<Provincia>>(resultado,HttpStatus.OK); //200
-
+        return new ResponseEntity<List<Inmobiliaria>>(resultado,HttpStatus.OK); //200
 
     }
 
-    @GetMapping("/provincia/{id}")
+
+    @GetMapping("inmobiliaria/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
 
-
         Map<String, Object> response = new HashMap<>();
-        Provincia resultado = null;
+        Inmobiliaria resultado = null;
 
         try {
 
-            resultado =	provinciaService.findById(id);
+            resultado =	inmobiliariaService.findById(id);
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al realizar la búsqueda de una provincia con el id: " + id + " en la BBDD");
+            response.put("mensaje", "Error al realizar la búsqueda de una inmobiliaria con el id: " + id + " en la BBDD");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        return new ResponseEntity<Provincia>(resultado,HttpStatus.OK); //200
-
+        return new ResponseEntity<Inmobiliaria>(resultado,HttpStatus.OK); //200
     }
 
 
-    @PostMapping("/provincia")
-    public ResponseEntity<?> create(@RequestBody Provincia provincia) {
-
+    @PostMapping("/inmobiliaria")
+    public ResponseEntity<?> create(@RequestBody Inmobiliaria inmobiliaria ) {
 
         Map<String, Object> response = new HashMap<>();
-        Provincia provinciaNew = null;
+        Inmobiliaria inmobiliariaNew = null;
 
         try {
 
-            provinciaNew = provinciaService.save(provincia);
+            inmobiliariaNew = inmobiliariaService.save(inmobiliaria);
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al crear una provincia en la BBDD");
+            response.put("mensaje", "Error al crear una inmobiliaria en la BBDD");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        response.put("mensaje", "La provincia con id: " + provinciaNew.getId() + " y de nombre: " + provinciaNew.getNombre() + " ha sido creada con éxito");
-        response.put("provincia", provinciaNew);
+        response.put("mensaje", "La inmobiliaria con id: " + inmobiliariaNew.getId() + " y de nombre: " + inmobiliariaNew.getNombre() + " ha sido creada con éxito");
+        response.put("inmobiliaria", inmobiliariaNew);
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK); //200
 
 
     }
 
+    @PutMapping("/inmobiliaria")
+    public ResponseEntity<?> update(@RequestBody Inmobiliaria inmobiliaria ) {
 
-    @PutMapping("/provincia")
-    public ResponseEntity<?> update(@RequestBody Provincia provincia) {
-
-        Long id = provincia.getId();
+        Long id = inmobiliaria.getId();
         Map<String, Object> response = new HashMap<>();
-        Provincia provinciaUpdate = null;
+        Inmobiliaria inmobiliariaUpdate = null;
 
         try {
 
-            provinciaUpdate = provinciaService.save(provincia);
+            inmobiliariaUpdate = inmobiliariaService.save(inmobiliaria);
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al modificar la provincia en la BBDD");
+            response.put("mensaje", "La inmobiliaria con id: " + id + " y de nombre: " + inmobiliariaUpdate.getNombre() + " ha sido modificada con éxito");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        response.put("mensaje", "La provincia con id: " + id + " y de nombre: " + provinciaUpdate.getNombre() + " ha sido modificada con éxito");
-        response.put("provincia", provinciaUpdate);
+        response.put("mensaje", "La inmobiliaria con id: " + id + " ha sido modificada con éxito");
+        response.put("inmobiliaria", inmobiliariaUpdate);
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK); //200
-
 
     }
 
 
-    @DeleteMapping("/provincia/{id}")
+    @DeleteMapping("/inmobiliaria/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
 
         try {
 
-            provinciaService.deleteById(id);
+            inmobiliariaService.deleteById(id);
 
         }catch(DataAccessException e) {
 
-            response.put("mensaje", "Error al eliminar la provincia con id: " + id + " en la BBDD");
+            response.put("mensaje", "Error al eliminar la inmobiliaria con id: " + id + " en la BBDD");
             response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 
         }
 
-        response.put("mensaje", "La provincia con id: " + id + " ha sido eliminada con éxito");
+        response.put("mensaje", "La inmobiliaria con id: " + id + " ha sido eliminada con éxito");
         return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK); //200
 
     }
-
-
 
 
 

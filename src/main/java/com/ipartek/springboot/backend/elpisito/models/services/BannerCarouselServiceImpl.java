@@ -1,7 +1,9 @@
 package com.ipartek.springboot.backend.elpisito.models.services;
 
 import com.ipartek.springboot.backend.elpisito.models.dao.IBannerCarouselDAO;
+import com.ipartek.springboot.backend.elpisito.models.dao.ITematicaDAO;
 import com.ipartek.springboot.backend.elpisito.models.entity.BannerCarousel;
+import com.ipartek.springboot.backend.elpisito.models.entity.Tematica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,10 @@ public class BannerCarouselServiceImpl implements IBannerCarouselService{
 
 
     @Autowired
-    private IBannerCarouselDAO bannerCarouselDAO;
+    private IBannerCarouselDAO  bannerCarouselDAO;
+
+    @Autowired
+    private ITematicaDAO tematicaDAO;
 
 
     @Override
@@ -43,8 +48,9 @@ public class BannerCarouselServiceImpl implements IBannerCarouselService{
     }
 
     @Override
-    public List<BannerCarousel> findByActivoAndTematica(Integer activo, String tematica) {
+    public List<BannerCarousel> findByActivoAndTematica(Integer activo, Long idTematica) {
+
+        Tematica tematica = tematicaDAO.findById(idTematica).orElse(null);
         return bannerCarouselDAO.findByActivoAndTematica(activo, tematica);
     }
-
 }

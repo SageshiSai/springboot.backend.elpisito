@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TipoServiceImp implements IGeneralService<Tipo>{
+public class TipoServiceImp implements IGeneralService<Tipo> {
 
     @Autowired
     private ITipoDAO tipoDAO;

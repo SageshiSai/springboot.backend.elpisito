@@ -1,10 +1,12 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,8 +33,13 @@ public class Poblacion implements Serializable {
     @Column
     private Integer activo = 1;
 
-    @ManyToOne //muchas poblaciones pertenecen a una provincia,
-    @JoinColumn(name = "provincia")
-    private Provincia provincia; //Este es el mapped by de el @OneToMany
+    //La tabla del JoinColumn es la que va a tener la anotación @ManyToOne
+    @ManyToOne //Muchas Poblaciones pueden pertenecer a una Provincia
+    @JoinColumn(name="provincia")
+    private Provincia provincia; //Este es el MappedBy del @OneToMany de la clase Provincia
+
+    @JsonIgnore
+    @OneToMany(mappedBy="poblacion", cascade = CascadeType.ALL)
+    private Set<Inmueble> inmuebles;
 
 }

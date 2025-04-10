@@ -1,5 +1,7 @@
 package com.ipartek.springboot.backend.elpisito.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,7 +22,7 @@ import java.util.Set;
 public class Inmueble implements Serializable {
 
     @Serial
-	private static final long serialVersionUID = -2246669607703879790L;
+	private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -137,15 +139,19 @@ public class Inmueble implements Serializable {
     @JoinColumn(name = "tipo")
     private Tipo tipo;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
     private Set<Imagen> imagenes;
 
     @ManyToOne
-    @JoinColumn(name = "provincia")
-    private Provincia provincia;
+    @JoinColumn(name= "poblacion")
+    private Poblacion poblacion;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "inmueble", cascade = CascadeType.ALL)
     private Set<Archivo> archivos;
+
+    @ManyToOne
+    @JoinColumn(name= "inmobiliaria")
+    private Inmobiliaria inmobiliaria;
 }
