@@ -34,12 +34,20 @@ public class Usuarios implements Serializable{
 	
 	@Column 
 	private String  password;
-	 
+
 	@Column(name="passopen")
 	private String  passOpen; //El password sin hashear
 
 	@Column
-	private Integer activo;
+	private String email;
 
-	
+
+	@Column
+	private String rol="ROLE_USER";
+
+
+	@Column
+	private Integer activo=1;
+
+
 }
