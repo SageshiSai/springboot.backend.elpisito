@@ -3,6 +3,7 @@ package com.ipartek.springboot.backend.elpisito.models.services;
 import com.ipartek.springboot.backend.elpisito.models.dao.IUsuarioDAO;
 import com.ipartek.springboot.backend.elpisito.models.entity.Usuarios;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class UsuarioServiceImpl implements IGeneralService<Usuarios>{
 
     @Autowired
     private IUsuarioDAO usuarioDAO;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder; //Utilizamos el bean declarado en la clase SecurityConfig
 
 
     @Override
@@ -45,13 +49,23 @@ public class UsuarioServiceImpl implements IGeneralService<Usuarios>{
         //Hibernate trabaja con le metodo save de dos formas:
         //1) si el usuario del argumento llega con id lo considera update
         //2) si el usuario del argumento llega sin id lo considera create
-        Usuarios user =  Usuarios.builder()
-                .user(usuario.getUser())
-                .password(usuario.getPassword())
-                .passOpen(usuario.getPassOpen())
-                .activo(usuario.getActivo())
-                .build();
-        return usuarioDAO.save(user);
+        if(usuario.getId() != null){
+            Usuarios usuarioActualBBDD =  usuarioDAO.findById(usuario.getId()).orElse(null);
+            if(usuarioActualBBDD != null){//Si el usuario recibido existe...
+                //Si el password es null o está vacío
+                if(usuario.getPassword() == null || usuario.getPassword().isEmpty()){
+                    usuario.setPassword(usuarioActualBBDD.getPassword());
+                } else{
+                    //Si el password llega cambiado
+                    usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+                }
+            } else {//Es un create
+                usuario.setPassOpen(usuario.getPassword());
+                usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+            }
+        }
+
+        return usuarioDAO.save(usuario);
     }
 
     @Override
