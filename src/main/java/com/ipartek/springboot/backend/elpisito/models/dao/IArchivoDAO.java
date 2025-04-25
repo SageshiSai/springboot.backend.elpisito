@@ -1,15 +1,19 @@
 package com.ipartek.springboot.backend.elpisito.models.dao;
 
-import com.ipartek.springboot.backend.elpisito.models.entity.Archivo;
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.ipartek.springboot.backend.apirest.models.entity.Archivo;
+
+
+
 
 @Repository
-public interface IArchivoDAO extends CrudRepository<Archivo, Long> {
+public interface IArchivoDAO extends CrudRepository<Archivo, Long>{
 
-    List<Archivo> findByActivo(Integer activo);
+	//DERIVED QUERY METHOD
+	List<Archivo> findByInmuebleId(Long id);
 
-    List<Archivo> findByInmuebleIdAndActivo(Long idInmueble, Integer activo);
 }

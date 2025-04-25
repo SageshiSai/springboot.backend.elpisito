@@ -1,4 +1,4 @@
-package com.ipartek.springboot.backend.elpisito.security;
+package com.ipartek.springboot.backend.apirest.securiy;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CustomError {
-
-    private String titulo;
-    private String mensaje;
-
+	
+	private String titulo;
+	private String mensaje;
+	
 
 }

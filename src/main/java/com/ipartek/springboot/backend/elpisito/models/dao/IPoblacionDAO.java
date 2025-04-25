@@ -1,14 +1,17 @@
 package com.ipartek.springboot.backend.elpisito.models.dao;
 
+import java.util.List;
 
-import com.ipartek.springboot.backend.elpisito.models.entity.Poblacion;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+
+import com.ipartek.springboot.backend.apirest.models.entity.Poblacion;
 
 @Repository
 public interface IPoblacionDAO extends CrudRepository<Poblacion, Long> {
 
-    List<Poblacion> findByActivo(Integer activo);
+	//DERIVED QUERY METHOD
+	List<Poblacion> findByActivo(Integer activo);
+	
 }

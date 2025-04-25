@@ -8,11 +8,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ipartek.springboot.backend.apirest.models.entity.Archivo;
 
-import com.ipartek.springboot.backend.apirest.models.entity.Imagen;
-
-
-public interface IImagenStorageService {
+public interface IArchivoStorageService {
 	
 	//Método auxiliar para "preparar" todo lo necesario para la subida de archivos
 	void init() throws IOException;
@@ -22,22 +20,19 @@ public interface IImagenStorageService {
 	//Además, este método, hará la notación en la BBDD
 	String store(MultipartFile file, Long idInmueble) throws RuntimeException, IOException, MimeTypeException;
 	
-	//Este método se encargará de devolvernos una imagen (jpg,png...)
-	Resource loadAsResource(String nombreImagen) throws RuntimeException;
+	//Este método se encargará de devolvernos el recurso (pdf,word...)
+	Resource loadAsResource(String nombreArchivo) throws RuntimeException;
 	
-	//Este método devolverá un List con todas las imágenes pertenecientes a un inmueble
-	List<Imagen> getImagenesByInmuebleId(Long idInmueble);
+	//Este método devolverá un List con todos los archivos pertenecientes a un inmueble
+	List<Archivo> getArchivosByInmuebleId(Long idInmueble);
 	
-	//Este método devuelve la ruta completa de una imagen
-	String getUrlCompletaImagen(String nombreImagen);
+	//Este método devuelve la ruta completa de un archivo
+	String getUrlCompletaArchivo(String nombreArchivo);
 	
 	//Este método borra un archivo físico.
-	void deleteImagen(Long id) throws DataAccessException, IOException;
+	void deleteArchivo(Long id) throws DataAccessException, IOException;
 	
-	//Este método borra solo la imagen fisica de la carpeta de "mediafiles"
-	void deleteImagenMediaFiles(String nombre)throws DataAccessException, IOException;
-	
-	
-	
+	//Este método borra solo el archivo físico de la carpeta de "mediafiles"
+	void deleteArchivoMediaFiles(String nombre)throws DataAccessException, IOException;
 
 }

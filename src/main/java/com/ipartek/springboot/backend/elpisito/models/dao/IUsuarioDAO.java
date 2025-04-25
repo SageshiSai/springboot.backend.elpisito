@@ -1,17 +1,23 @@
 package com.ipartek.springboot.backend.elpisito.models.dao;
 
-
-import com.ipartek.springboot.backend.elpisito.models.entity.Usuarios;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+
+import com.ipartek.springboot.backend.apirest.models.entity.Usuario;
+
+
+
 @Repository
-public interface IUsuarioDAO extends CrudRepository<Usuarios, Long> {
+public interface IUsuarioDAO extends CrudRepository<Usuario,Long> {
+	
+	//Capa de persistencia
+	
+	//DERIVED QUERY METHOD
+	List<Usuario> findByActivo(Integer activo);
+	Optional<Usuario> findOneByEmail(String email);
 
-
-    List<Usuarios> findByActivo(Integer activo);
-    Optional<Usuarios> findOneByEmail(String email);
 }

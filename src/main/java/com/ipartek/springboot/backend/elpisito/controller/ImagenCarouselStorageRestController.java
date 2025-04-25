@@ -1,10 +1,8 @@
 package com.ipartek.springboot.backend.elpisito.controller;
 
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.tika.mime.MimeTypeException;
@@ -23,23 +21,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import com.ipartek.springboot.backend.apirest.models.entity.Imagen;
-import com.ipartek.springboot.backend.apirest.storage.IImagenStorageService;
-
+import com.ipartek.springboot.backend.apirest.storage.IImagenCarouselStorageService;
 
 //@CrossOrigin(origins = ("http://localhost:4200"))
 @RestController
 @RequestMapping("/media")
-public class ImagenStorageRestController {
+public class ImagenCarouselStorageRestController {
+	
 	
 	@Autowired
-	private IImagenStorageService imagenStorageService; //Podemos utilizar la Interface (IImagenStorageService) en vez de la implementación (ImagenStorageServiceImpl) porque polimorficamente son compatibles
+	private IImagenCarouselStorageService imagenCarouselStorageService;
+	
 	
 
-	
-	@PostMapping("/imagen/{idInmueble}")
-	public ResponseEntity<?> uploadImagen(@RequestParam("imagen") MultipartFile multipartFile, @PathVariable Long idInmueble) {
+	@PostMapping("/imagen-carousel/{idBanner}")
+	public ResponseEntity<?> uploadImagen(@RequestParam("imagen") MultipartFile multipartFile, @PathVariable Long idBanner) {
 		//La anotación "imagen" hecha en @RequestParam es super importante porque es la referencia que
 		//debemos emplear en cliente
 		
@@ -49,14 +45,14 @@ public class ImagenStorageRestController {
 		
 		try {
 			
-			String nombreImagen = imagenStorageService.store(multipartFile,idInmueble);
+			String nombreImagen = imagenCarouselStorageService.store(multipartFile,idBanner);
 			//EN ESTE PUNTO EL ARCHIVO FÍSICO YA ESTÁ SUBIDO Y LA ANOTACIÓN EFECTUADA EN LA BBDD
 			
 			//A PARTIR DE ESTE PUNTO LO QUE VAMOS A HACER ES CONSEGUIR LA URL COMPLETA DE LA IMAGEN
 			//SUBIDA PARA DEVOLVERLA EN EL RESPONSE (response)
 			//Vamos a conseguir la URL completa del archivo...
 			
-			url = imagenStorageService.getUrlCompletaImagen(nombreImagen);
+			url = imagenCarouselStorageService.getUrlCompletaImagen(nombreImagen);
 			
 		}catch(RuntimeException e) {
 			
@@ -88,8 +84,12 @@ public class ImagenStorageRestController {
 		
 	}
 	
+	
+	
+	
+	
 	//Este método nos devuelve la imagen física
-	@GetMapping("/imagen/{nombreImagen:.+}")
+	@GetMapping("/imagen-carousel/{nombreImagen:.+}")
 	public ResponseEntity<?> getImagen(@PathVariable String nombreImagen){
 		
 		Map<String,String> response = new HashMap<>();
@@ -98,7 +98,7 @@ public class ImagenStorageRestController {
 		
 		try {
 			
-			imagen = imagenStorageService.loadAsResource(nombreImagen);
+			imagen = imagenCarouselStorageService.loadAsResource(nombreImagen);
 			//Extraemos el content type (Tipo de contenido-Tipo MIME) para pasarlo en el header de la response
 			contentType =  Files.probeContentType(imagen.getFile().toPath());
 		}catch(Exception e) {
@@ -115,63 +115,33 @@ public class ImagenStorageRestController {
 	}
 	
 	
-	@GetMapping("/imagenes/{idInmueble}")
-	public ResponseEntity<?> getImagenesByInmuebleId(@PathVariable Long idInmueble){
-		
-		Map<String, String> response = new HashMap<>();
-		
-		try {
-		
-			List<Imagen> imagenes = imagenStorageService.getImagenesByInmuebleId(idInmueble);
-			
-			
-			if( imagenes.isEmpty() || imagenes == null) {
-				
-				response.put("mensaje", "No se encontraron imágenes para este inmueble");
-				return new ResponseEntity<Map<String, String>>(response,HttpStatus.OK); //Enviamos un 200 porque no se han encontrado archivos pero no ha habido ningún problema...
-			}else {
-						
-				return new ResponseEntity<List<Imagen>>(imagenes,HttpStatus.OK);
-					
-			}
-		
-		}catch (RuntimeException e) {
-			
-			response.put("mensaje", "Error al obtener las imágenes del inmueble");
-			return new ResponseEntity<Map<String, String>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}
-		
-		
-	}
-	
-	
-	@DeleteMapping("/imagen/{id}")
+	@DeleteMapping("/imagen-carousel/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
 			
-			imagenStorageService.deleteImagen(id);
+			imagenCarouselStorageService.deleteImagen(id);
 			
 		}catch(DataAccessException e) {
 			
-			response.put("mensaje", "Error al eliminar la imagen con id: " + id + " en la BBDD");
+			response.put("mensaje", "Error al eliminar la imagen banner carousel con id: " + id + " en la BBDD");
 			response.put("error", e.getMessage().concat(" :").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 			
 		}catch(IOException e) {
 			
-			response.put("mensaje", "Error al eliminar la imagen con id: " + id + " en la BBDD");
+			response.put("mensaje", "Error al eliminar la imagen banner carousel con id: " + id + " en la BBDD");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); //500
 			
 		}
 		
-		response.put("mensaje", "La imagen con id: " + id + " ha sido eliminada con éxito");
+		response.put("mensaje", "La imagen banner carousel con id: " + id + " ha sido eliminada con éxito");
 		return new ResponseEntity<Map<String, Object>>(response,HttpStatus.OK); //200
 		
 	}
+	
 	
 	
 	

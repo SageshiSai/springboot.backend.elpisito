@@ -1,16 +1,18 @@
 package com.ipartek.springboot.backend.elpisito.models.dao;
 
+import java.util.List;
 
-import com.ipartek.springboot.backend.elpisito.models.entity.Imagen;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.ipartek.springboot.backend.apirest.models.entity.Imagen;
+
 
 @Repository
-public interface IImagenDAO extends CrudRepository<Imagen, Long> {
+public interface IImagenDAO extends CrudRepository<Imagen, Long>{
 
-    List<Imagen> findByActivo(Integer activo);
-    List<Imagen> findByInmuebleId(Long id);
-    List<Imagen> findByInmuebleIdAndActivo(Long id, Integer activo);
+	//DERIVED QUERY METHOD
+	List<Imagen> findByInmuebleId(Long id);
+	
+	
 }
